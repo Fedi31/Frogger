@@ -1,6 +1,6 @@
 package model;
 
-public class MovingObject {
+public class MovingObject{
 	private static final int START_X_LEFT = -100;
     private static final int START_X_RIGHT = 900;
 
@@ -20,7 +20,7 @@ public class MovingObject {
         this.hitBox = new HitBox(position.getX(), position.getY(),
                                  size.getWidth(), size.getHeight());
 
-        // Imposto la direzione in base al tipo
+        //Imposto la direzione in base al tipo
         switch (type) {
             case CAR:
             case TRUCK:
