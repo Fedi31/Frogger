@@ -5,6 +5,12 @@ public class Size{
 	private int width;
 	private int height;
 	
+	// costruttore della classe 'Size'
+	public Size(int width, int height) {
+	this.width = width;
+	this.height = height;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -20,7 +26,5 @@ public class Size{
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
-	
 	
 }
