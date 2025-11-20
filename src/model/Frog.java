@@ -1,5 +1,7 @@
 package model;
 
+import java.util.LinkedList;
+
 public class Frog {
 
     public static final int DEFAULT_LIVES = 2;
@@ -9,20 +11,24 @@ public class Frog {
     private Direction direction;
     private Size size;
     private Position position;
+    private Map map;
     private int lives;
     private HitBox hitBox;
     private int screenWidth;
     private int screenHeight;
+    private LinkedList<MovingObject> movingObjects;
 
     public Frog(String name, Direction direction, Size size, Position position, Map map, int lives) {
         this.name = name;
         this.direction = direction;
         this.size = size;
         this.position = position;
+        this.map = map;
         this.screenWidth = map.getWidth();
         this.screenHeight = map.getHeight();
         this.lives = lives;
         this.hitBox = new HitBox(position.getX(), position.getY(), size.getWidth(), size.getHeight());
+        this.movingObjects = new LinkedList<>();
     }
 
     //getters
@@ -139,9 +145,51 @@ public class Frog {
         updateHitBox(); // aggiorna sempre la hitbox
     }
 
-    //
-    public void collisionDetection() {
-    	
+    public boolean isInWaterArea() {
+        int topArea = this.position.getY();
+        int bottomArea = this.position.getY() + this.size.getHeight();
+
+        // controlla se anche solo una parte della rana è nel fiume
+        return bottomArea > map.getRiverTop() && topArea < map.getRiverBottom();
     }
     
+
+    //Metodo per captare le collisioni tra hitbox rana e hitbox obj
+    public void collisionDetection(LinkedList<MovingObject> movingObjects) {
+    	boolean onWater = false;
+    	 
+        for (MovingObject obj : movingObjects) {
+        	if (this.hitBox.intersects(obj.getHitBox())) {
+	                
+        		//Se collide con un veicolo, perde una vita
+	            if (obj.getType() == MovingObjectType.CAR ||
+	            		obj.getType() == MovingObjectType.TRUCK) {
+	
+	                    loseLife();
+	                    System.out.println("Frog lost a life! Lives: " + lives);
+	            }
+	
+	            //Se è in acqua (trunk o turtle), frog va trasportata
+	            if (obj.getType() == MovingObjectType.TRUNK ||
+	            	obj.getType() == MovingObjectType.TURTLE) {
+	
+	                // esempio: la rana viene spostata con il tronco
+	                this.position.setX(this.position.getX() + 
+	                		(obj.getDirection() == Direction.RIGHT ? 1 : -1));
+	                updateHitBox();
+	                onWater = true;
+	            }
+	        }
+        }
+        
+        if (!onWater && isInWaterArea()) { 
+        	loseLife();
+            System.out.println("Frog felt into water! Lives: " + lives);
+        }
+	     
+        if (isDead())
+            System.out.println("Dead!");
+    }
 }
+
+    

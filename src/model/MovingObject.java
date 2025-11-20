@@ -93,4 +93,7 @@ public class MovingObject{
         return type;
     }
 
+    public Direction getDirection() {
+    	return direction;
+    }
 }
