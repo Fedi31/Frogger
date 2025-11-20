@@ -7,15 +7,15 @@ public class Frog {
     public static final int DEFAULT_LIVES = 2;
     public static final int MOVE_STEP = 1;
 
-    private String name;
+    private final String name;
     private Direction direction;
-    private Size size;
+    private final Size size;
     private Position position;
-    private Map map;
+    private final Map map;
     private int lives;
     private HitBox hitBox;
-    private int screenWidth;
-    private int screenHeight;
+    private final int screenWidth;
+    private final int screenHeight;
     private LinkedList<MovingObject> movingObjects;
 
     public Frog(String name, Direction direction, Size size, Position position, Map map, int lives) {

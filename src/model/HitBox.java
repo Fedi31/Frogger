@@ -1,7 +1,10 @@
 package model;
 
 public class HitBox {
-	public int x, y, width, height;
+	public int x;
+	public int y;
+	public int width;
+	public int height;
 
     public HitBox(int x, int y, int width, int height) {
         this.x = x;

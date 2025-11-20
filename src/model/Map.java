@@ -1,9 +1,9 @@
 package model;
 
 public class Map{
-	private Size size;
-	private int riverTop;
-	private int riverBottom;
+	private final Size size;
+	private final int riverTop;
+	private final int riverBottom;
 	
 	public Map(Size size, int riverTop, int riverBottom) {
 		this.size = size;

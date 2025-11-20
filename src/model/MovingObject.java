@@ -4,13 +4,13 @@ public class MovingObject{
 	private static final int START_X_LEFT = -100;
     private static final int START_X_RIGHT = 900;
 
-    private MovingObjectType type;
+    private final MovingObjectType type;
     private Direction direction;
     private final int speed = 1;
     private Position position;
-    private Size size;
+    private final Size size;
     private HitBox hitBox;
-    private int screenWidth;
+    private final int screenWidth;
 
     public MovingObject(Position position, Size size, MovingObjectType type, Map map) {
         this.position = position;
