@@ -31,6 +31,10 @@ public class Frog {
         this.movingObjects = new LinkedList<>();
     }
 
+    public Frog(String name, Direction direction, Size size, int x, int y, Map map, int lives) {
+    	this(name, direction, size, new Position(x, y), map, lives);
+    }
+    
     //getters
     public String getName() {
         return name;
@@ -65,6 +69,14 @@ public class Frog {
     }
     
     //setters
+    public void setX(int x) {
+    	this.position.setX(x);
+    }
+    
+    public void setY(int y) {
+    	this.position.setY(y);
+    }
+    
     public void setPosition(Position position) {
         this.position = position;
     }
