@@ -1,6 +1,6 @@
 package model;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class Frog {
 
@@ -16,7 +16,6 @@ public class Frog {
     private HitBox hitBox;
     private final int screenWidth;
     private final int screenHeight;
-    private LinkedList<MovingObject> movingObjects;
 
     public Frog(String name, Direction direction, Size size, Position position, Map map, int lives) {
         this.name = name;
@@ -28,7 +27,6 @@ public class Frog {
         this.screenHeight = map.getHeight();
         this.lives = lives;
         this.hitBox = new HitBox(position.getX(), position.getY(), size.getWidth(), size.getHeight());
-        this.movingObjects = new LinkedList<>();
     }
 
     public Frog(String name, Direction direction, Size size, int x, int y, Map map, int lives) {
@@ -167,10 +165,10 @@ public class Frog {
     
 
     //Metodo per captare le collisioni tra hitbox rana e hitbox obj
-    public void collisionDetection(LinkedList<MovingObject> movingObjects) {
+    public void collisionDetection(HashMap<MovingObject, Integer> movingObjects) {
     	boolean onWater = false;
     	 
-        for (MovingObject obj : movingObjects) {
+        for (MovingObject obj : movingObjects.keySet()) {
         	if (this.hitBox.intersects(obj.getHitBox())) {
 	                
         		//Se collide con un veicolo, perde una vita
@@ -185,7 +183,7 @@ public class Frog {
 	            if (obj.getType() == MovingObjectType.TRUNK ||
 	            	obj.getType() == MovingObjectType.TURTLE) {
 	
-	                // esempio: la rana viene spostata con il tronco
+	                // esempio se la rana viene spostata con il tronco
 	                this.position.setX(this.position.getX() + 
 	                		(obj.getDirection() == Direction.RIGHT ? 1 : -1));
 	                updateHitBox();

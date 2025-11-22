@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -12,25 +13,37 @@ public class Game {
 	private Map map;
 	private Frog frog;
 	private EarnLife earnLife;
+	
 	private Random randomNumberGenerator;
+	
 	private boolean isEarnLifeSpawned;
 	private int earnLifeSpawnCycles;
-	private LinkedList<MovingObject> movingObjects;
+	
+	private HashMap<MovingObjectType, Integer> spawnIntervals;
+    private HashMap<MovingObjectType, LocalDateTime> lastSpawnTime;
+
 	private String death; //morte formato stringa
 	private LocalDateTime lastEarnLifeSpawnTime; 
 	
 	public Game(Map map) {
 		this.startTime = LocalDateTime.now();
 		this.map = map;
-		this.movingObjects = new LinkedList<>();
 		this.randomNumberGenerator = new Random();
 		
 		this.isEarnLifeSpawned = false;
 		this.earnLifeSpawnCycles = 1;
 		this.lastEarnLifeSpawnTime.until(LocalDateTime.now(), ChronoUnit.SECONDS);
 
-		this.death = " ";
+		this.death = "";
 		
+		this.spawnIntervals = new HashMap<>();
+        this.lastSpawnTime = new HashMap<>();
+
+        // Riempie la mappa usando i valori definiti nell’enum
+        for (MovingObjectType type : MovingObjectType.values()) {
+            spawnIntervals.put(type, type.getSpawnInterval());
+            lastSpawnTime.put(type, LocalDateTime.now());
+        }
 	}
 
 	public LocalDateTime getStartTime() {
@@ -59,10 +72,6 @@ public class Game {
 
 	public int getEarnLifeSpawnCycles() {
 		return earnLifeSpawnCycles;
-	}
-
-	public LinkedList<MovingObject> getMovingObjects() {
-		return movingObjects;
 	}
 
 	public String getDeath() {
@@ -122,35 +131,30 @@ public class Game {
 	}
 
 	/* metodi per il movimento del giocatore */
-	private void movePlayer(Frog frog, int x, int y) {
+	private void moveFrog(Frog frog, int x, int y) {
 		frog.setX(x);
 	    frog.setY(y);
 	}
 
-	public void movePlayerUp(Frog frog) {
-		this.movePlayer(frog, frog.getX(), frog.getY());
+	public void moveFrogUp(Frog frog) {
+		this.moveFrog(frog, frog.getX(), frog.getY());
 		frog.setDirection(Direction.UP);
 	}
 
-	public void movePlayerDown(Frog frog) {
-		this.movePlayer(frog, frog.getX(), frog.getY());
+	public void moveFrogDown(Frog frog) {
+		this.moveFrog(frog, frog.getX(), frog.getY());
 		frog.setDirection(Direction.DOWN);
 	}
 
-	public void movePlayerLeft(Frog frog) {
-		this.movePlayer(frog, frog.getX(), frog.getY());
+	public void moveFrogLeft(Frog frog) {
+		this.moveFrog(frog, frog.getX(), frog.getY());
 		frog.setDirection(Direction.LEFT);
 	}
 
-	public void movePlayerRight(Frog frog) {
-		this.movePlayer(frog, frog.getX(), frog.getY());
+	public void moveFrogRight(Frog frog) {
+		this.moveFrog(frog, frog.getX(), frog.getY());
 		frog.setDirection(Direction.RIGHT);
 	}
-	
-	
-	
-	
-	
 	
 	
 	
