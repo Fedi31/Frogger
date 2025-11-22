@@ -4,13 +4,18 @@ public class EarnLife {
 	private static final int HEART_VALUE = 1;
 	
 	private final Position position;
+	private HitBox hitBox;
+	private Size size;
 	
-	public EarnLife(Position position) {
+	public EarnLife(Position position, Size size) {
 		this.position = position;
+		
+		this.hitBox = new HitBox(position.getX(), position.getY(),
+                size.getWidth(), size.getHeight());
 	}
 	
-	public EarnLife(int x, int y) {
-		this(new Position(x,y));
+	public EarnLife(int x, int y, Size size) {
+		this(new Position(x,y), size);
 	}
 
 	public Position getPosition() {
@@ -24,4 +29,9 @@ public class EarnLife {
 	public int getY() {
 		return position.getY();
 	}
+	
+	public HitBox getHitBox() {
+        return hitBox;
+    }
+
 }

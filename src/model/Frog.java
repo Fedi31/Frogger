@@ -165,7 +165,7 @@ public class Frog {
     
 
     //Metodo per captare le collisioni tra hitbox rana e hitbox obj
-    public void collisionDetection(HashMap<MovingObject, Integer> movingObjects) {
+    public void movingObjectCollision(HashMap<MovingObject, Integer> movingObjects) {
     	boolean onWater = false;
     	 
         for (MovingObject obj : movingObjects.keySet()) {
@@ -199,7 +199,17 @@ public class Frog {
 	     
         if (isDead())
             System.out.println("Dead!");
+        // metodo per far tornare rana al punto di partenza
     }
+    
+    //Metodo per captare le collisioni tra hitbox rana e hitbox cuore
+    public void heartCollision(EarnLife earnLife){
+    	if (this.hitBox.intersects(earnLife.getHitBox())){
+    		resetLives();
+    		System.out.println("Frog gained a life! Lives: " + lives);
+    	}
+	}
+    
 }
 
     

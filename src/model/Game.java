@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -11,6 +10,7 @@ public class Game {
 	private static final int EARN_LIFE_SPAWN_INTERVAL = 20; //ogni 20 secondi
 	private LocalDateTime startTime;
 	private Map map;
+	private Size size;
 	private Frog frog;
 	private EarnLife earnLife;
 	
@@ -19,6 +19,7 @@ public class Game {
 	private boolean isEarnLifeSpawned;
 	private int earnLifeSpawnCycles;
 	
+	private LinkedList<MovingObject> movingObjects = new LinkedList<>();
 	private HashMap<MovingObjectType, Integer> spawnIntervals;
     private HashMap<MovingObjectType, LocalDateTime> lastSpawnTime;
 
@@ -28,16 +29,18 @@ public class Game {
 	public Game(Map map) {
 		this.startTime = LocalDateTime.now();
 		this.map = map;
+		this.size = size;
 		this.randomNumberGenerator = new Random();
 		
+		this.movingObjects = new LinkedList<>();
 		this.isEarnLifeSpawned = false;
 		this.earnLifeSpawnCycles = 1;
-		this.lastEarnLifeSpawnTime.until(LocalDateTime.now(), ChronoUnit.SECONDS);
 
 		this.death = "";
 		
 		this.spawnIntervals = new HashMap<>();
         this.lastSpawnTime = new HashMap<>();
+		this.lastEarnLifeSpawnTime.until(LocalDateTime.now(), ChronoUnit.SECONDS);
 
         // Riempie la mappa usando i valori definiti nell’enum
         for (MovingObjectType type : MovingObjectType.values()) {
@@ -65,6 +68,24 @@ public class Game {
 	public Random getRandomNumberGenerator() {
 		return randomNumberGenerator;
 	}
+	
+    public LinkedList<MovingObject> getMovingObjects() {
+        return movingObjects;
+    }
+
+    public void addMovingObject(MovingObject obj) {
+        movingObjects.add(obj);
+    }
+
+    public void removeMovingObject(MovingObject obj) {
+        movingObjects.remove(obj);
+    }
+
+    public void updateMovingObjects() {
+        for (MovingObject obj : movingObjects) {
+            obj.updatePosition();
+        }
+    }
 
 	public boolean isEarnLifeSpawned() {
 		return isEarnLifeSpawned;
@@ -116,7 +137,7 @@ public class Game {
 	        int x = this.randomNumberGenerator.nextInt(0, this.map.getWidth() + 1);
 	        int y = this.randomNumberGenerator.nextInt(0, this.map.getHeight() + 1);
 
-	        this.earnLife = new EarnLife(x, y);
+	        this.earnLife = new EarnLife(x, y, size);
 
 	        this.isEarnLifeSpawned = true;
 	        this.earnLifeSpawnCycles++;
@@ -130,6 +151,34 @@ public class Game {
 	    }
 	}
 
+	//public boolean checkMovingObjectCollision() {
+		
+	//}
+	
+	//public boolean checkHeartCollision() {
+			//metodo disappear()
+	//}
+	
+	public boolean checkGameOver() {
+		boolean result = true;
+		
+		result = frog.getLives() <= 0;
+		
+		if (death.isEmpty() && frog.getLives() <= 0) 
+	        death = formatMatchTime();
+	        
+		return result;
+	}
+	
+	private String formatMatchTime() {
+	    return String.format("%02d:%02d:%02d",
+	        getMatchDurationHours(),
+	        getMatchDurationMinutes(),
+	        getMatchDurationSeconds()
+	    );
+	}
+
+	
 	/* metodi per il movimento del giocatore */
 	private void moveFrog(Frog frog, int x, int y) {
 		frog.setX(x);
